@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Manager Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="container">
+
+    <h1>Manager Dashboard</h1>
+
+    <!-- ================= SUB-MANAGER FILTER ================= -->
+    <h3>Filter by Sub-Manager:</h3>
+    <form method="get" action="/dashboard">
+        <select name="sub_manager_filter">
+            <option value="">All Sub-Managers</option>
+            {% for sm in sub_managers %}
+                <option value="{{ sm.serial_number }}" {% if sm.serial_number == selected_sub_manager %}selected{% endif %}>
+                    {{ sm.username }}
+                </option>
+            {% endfor %}
+        </select>
+        <button type="submit">Filter</button>
+    </form>
+
+    <!-- ================= COUNTERS ================= -->
+    <div class="stats">
+        <div class="card"><h3>Total Users</h3><p>{{ total_users }}</p></div>
+        <div class="card"><h3>Sub Managers</h3><p>{{ total_sub_managers }}</p></div>
+        <div class="card"><h3>Total Transactions</h3><p>{{ total_transactions }}</p></div>
+        <div class="card"><h3>Total Income</h3><p>Rs {{ total_income }}</p></div>
+        <div class="card"><h3>Remaining Balance</h3><p>Rs {{ remaining_balance }}</p></div>
+        <div class="card"><h3>Complaints</h3><p>{{ total_complaints }}</p></div>
+        <div class="card"><h3>Resolved</h3><p>{{ resolved_complaints }}</p></div>
+    </div>
+
+    <!-- ================= SEARCH USER ================= -->
+    <h3>Search User by Serial Number:</h3>
+    <form method="get" action="/dashboard">
+        <input type="text" name="search_serial" placeholder="Enter Serial Number" value="{{ search_serial }}">
+        <button type="submit">Search</button>
+        <a href="/reset_search"><button type="button">Reset</button></a>
+    </form>
+    {% if not_found %}
+        <p class="notfound">User not found.</p>
+    {% endif %}
+
+    <!-- ================= ADD USER ================= -->
+    <h3>Add New User:</h3>
+    <form method="post" action="/dashboard">
+        <input type="hidden" name="action" value="add_user">
+        <input type="text" name="serial" placeholder="Serial Number" required>
+        <input type="text" name="username" placeholder="Username" required>
+        <input type="email" name="email" placeholder="Email" required>
+        <input type="text" name="number" placeholder="Number" required>
+        <input type="text" name="address" placeholder="Address" required>
+        <input type="password" name="password" placeholder="Password" required>
+        <button type="submit">Add User</button>
+    </form>
+
+    <!-- ================= USERS LIST ================= -->
+    <h3>Users List:</h3>
+    <table>
+        <tr>
+            <th>Serial</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Number</th>
+            <th>Address</th>
+            <th>Assigned Sub-Manager</th>
+            <th>Actions</th>
+        </tr>
+        {% for u in users %}
+        <tr {% if search_result_serial == u.serial_number %}class="highlight"{% endif %}>
+            <td>{{ u.serial_number }}</td>
+            <td>{{ u.username }}</td>
+            <td>{{ u.email }}</td>
+            <td>{{ u.number }}</td>
+            <td>{{ u.address }}</td>
+            <td>
+                {% if u.assigned_to %}
+                    {% for sm in sub_managers %}
+                        {% if sm.serial_number == u.assigned_to %}
+                            {{ sm.username }}
+                        {% endif %}
+                    {% endfor %}
+                {% else %}
+                    None
+                {% endif %}
+            </td>
+            <td>
+                <form method="post">
+                    <input type="hidden" name="user_serial" value="{{ u.serial_number }}">
+                    <select name="sub_manager_serial">
+                        <option value="">Unassign</option>
+                        {% for sm in sub_managers %}
+                            <option value="{{ sm.serial_number }}" {% if sm.serial_number == u.assigned_to %}selected{% endif %}>{{ sm.username }}</option>
+                        {% endfor %}
+                    </select>
+                    <button type="submit" name="assign_sub">Update</button>
+                </form>
+                <a href="/edit/{{ u.serial_number }}?search_serial={{ search_serial }}">Edit</a> |
+                <a href="/remove/{{ u.serial_number }}?search_serial={{ search_serial }}">Remove</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <div class="dashboard-buttons">
+        <a class="button" href="/transactions">Transactions</a>
+        <a class="button" href="/complaints">Complaints</a>
+        <a class="button" href="/updates">Updates</a>
+        <a class="button" href="/logout">Logout</a>
+    </div>
+
+</div>
+</body>
+</html>

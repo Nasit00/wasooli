@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .status-circle {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: inline-block;
+            cursor: pointer;
+            margin-right: 10px;
+            position: relative;
+        }
+
+        .status-text {
+            display: none;
+            position: absolute;
+            top: -5px;
+            left: 30px;
+            background: #fff;
+            border: 1px solid #aaa;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 14px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            white-space: nowrap;
+        }
+
+        .status-circle:hover .status-text,
+        .status-circle.active .status-text {
+            display: block;
+        }
+
+        .green { background-color: green; }
+        .yellow { background-color: yellow; }
+        .red { background-color: red; }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #aaa; padding: 8px; text-align: center; }
+        th { background-color: black; color: white; }
+        .pending { background-color: #fff3cd; } /* yellow */
+        .resolved { background-color: #d4edda; } /* green */
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Welcome, {{ user.username }}!</h1>
+
+    <!-- System Status -->
+    <div class="status-circle {% if system_status == 'online' %}green{% elif system_status == 'maintenance' %}yellow{% else %}red{% endif %}" 
+         onclick="toggleStatus(this)">
+        <span class="status-text">
+            {% if system_status == 'online' %}System Online{% elif system_status == 'maintenance' %}Under Maintenance{% else %}System Offline{% endif %}
+        </span>
+    </div>
+
+    <p>Email: {{ user.email }}</p>
+    <p>Number: {{ user.number }}</p>
+    <p>Address: {{ user.address }}</p>
+
+    <h3>Your Packages / Transactions</h3>
+    {% if packages %}
+    <table>
+        <tr>
+            <th>Package</th>
+            <th>Price</th>
+            <th>Status</th>
+            <th>Receipt</th>
+        </tr>
+        {% for t in packages %}
+        <tr class="{% if t.status=='Pending' %}pending{% elif t.status=='Paid' %}resolved{% endif %}">
+            <td>{{ t.package_name }}</td>
+            <td>{{ t.price }}</td>
+            <td>{{ t.status }}</td>
+            <td>
+                {% if t.status == 'Pending' %}
+                <form method="post" action="/transactions">
+                    <input type="text" name="receipt" placeholder="Enter Receipt" required>
+                    <input type="hidden" name="package" value="{{ t.package_name }}">
+                    <button type="submit">Submit</button>
+                </form>
+                {% else %}
+                {{ t.receipt_number }}
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% else %}
+    <p>No assigned packages yet.</p>
+    {% endif %}
+
+    <div class="dashboard-buttons">
+        <a class="button" href="/profile">Edit Profile</a>
+        <a class="button" href="/transactions">Transactions</a>
+        <a class="button" href="/complaints">Complaints</a>
+        <a class="button" href="/updates">Updates</a>
+        <a class="button" href="/logout">Logout</a>
+    </div>
+</div>
+
+<script>
+function toggleStatus(el) {
+    el.classList.toggle("active");
+}
+</script>
+</body>
+</html>

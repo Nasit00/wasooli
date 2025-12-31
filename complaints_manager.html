@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Complaints - Manager</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .pending { background-color: #fff3cd; }         /* yellow */
+        .maintenance { background-color: #d1ecf1; }    /* blue */
+        .resolved { background-color: #d4edda; }       /* green */
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 8px; border: 1px solid #ccc; text-align: left; }
+        .button { display:inline-block; padding:8px 12px; background:#007BFF; color:#fff; text-decoration:none; border-radius:4px; margin-top:10px;}
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Complaints Management</h2>
+
+    <table>
+        <tr>
+            <th>User</th>
+            <th>Serial</th>
+            <th>Complaint</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+
+        {% for c in complaints %}
+        <tr class="{% if c.status == 'Pending' %}pending{% elif c.status == 'Under Maintenance' %}maintenance{% elif c.status == 'Resolved' %}resolved{% endif %}">
+            <td>{{ c.username }}</td>
+            <td>{{ c.serial }}</td>
+            <td>{{ c.message }}</td>
+            <td><strong>{{ c.status }}</strong></td>
+            <td>
+                <form method="post" action="/update_complaint/{{ c.id }}/Pending" style="display:inline;">
+                    <button type="submit" {% if c.status=='Pending' %}disabled{% endif %}>Pending</button>
+                </form>
+                <form method="post" action="/update_complaint/{{ c.id }}/Under Maintenance" style="display:inline;">
+                    <button type="submit" {% if c.status=='Under Maintenance' %}disabled{% endif %}>Maintenance</button>
+                </form>
+                <form method="post" action="/update_complaint/{{ c.id }}/Resolved" style="display:inline;">
+                    <button type="submit" {% if c.status=='Resolved' %}disabled{% endif %}>Resolved</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <a href="/dashboard" class="button">Back to Dashboard</a>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit User</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="container">
+    <h2>Edit User</h2>
+    <form method="post">
+        <p><b>Serial:</b> {{ u.serial_number }}</p>
+        <p><b>Username:</b> {{ u.username }}</p>
+        <input name="email" value="{{ u.email }}" required>
+        <input name="number" value="{{ u.number }}" required>
+        <input name="address" value="{{ u.address }}" required>
+        <button>Update</button>
+    </form>
+    <a href="/dashboard{% if search_serial %}?search_serial={{ search_serial }}{% endif %}">⬅ Back to List</a>
+
+</div>
+</body>
+</html>

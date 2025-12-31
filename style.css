@@ -1,0 +1,243 @@
+/* ---------------- General Styles ---------------- */
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(45deg,#01a7f4,#483f3f71 70%);
+    margin: 0;
+    padding: 0;
+}
+
+/* ---------------- Headings ---------------- */
+h1 {
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* ---------------- Container ---------------- */
+.container {
+    width: 95%;
+    max-width: 1200px;
+    margin: 20px auto;
+    background: linear-gradient(45deg,#01a7f4,#483f3f71 70%);
+    padding: 20px;
+    border-radius: 10px;
+    box-sizing: border-box;
+}
+
+/* ---------------- Input & Buttons ---------------- */
+input, select, textarea {
+    padding: 8px;
+    margin: 5px 0;
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+.back-button {
+    display: inline-block;
+    padding: 6px 12px;        /* chhota size */
+    font-size: 14px;           /* normal font */
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 5px;
+    border: none;
+    text-decoration: none;
+    text-align: center;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+.back-button:hover {
+    background-color: #45a049;
+}
+
+button {
+    padding: 8px 15px;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+/* ---------------- Tables ---------------- */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+th, td {
+    border: 1px solid #aaa;
+    padding: 8px;
+    text-align: center;
+}
+
+th {
+    background: black;
+    color: white;
+}
+
+.highlight {
+    background-color: yellow;
+}
+
+.notfound {
+    color: red;
+    font-weight: bold;
+}
+
+/* ---------------- Dashboard Buttons ---------------- */
+.dashboard-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.button {
+    flex: 1 1 150px; 
+    text-align: center;
+    text-decoration: none;
+    padding: 12px 25px;
+    font-size: 16px;
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 8px;
+}
+
+.button:hover {
+    background-color: #45a049;
+}
+
+/* ---------------- Stats Cards ---------------- */
+.stats {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.stats .card {
+    flex: 1 1 150px;
+    min-width: 120px;
+    max-width: 200px;
+    padding: 15px;
+    background-color: #f0f0f0;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    font-size: 14px;
+}
+
+/* ---------------- Login Form ---------------- */
+.login-container {
+    width: 350px;
+    max-width: 90%;
+    margin: 100px auto 50px auto;
+    padding: 25px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0px 0px 15px rgba(0,0,0,0.2);
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.login-container h2 {
+    margin-bottom: 20px;
+}
+
+.login-container input {
+    width: 90%;
+    padding: 10px;
+    margin: 10px 0;
+}
+
+.login-container button {
+    width: 95%;
+    padding: 10px;
+    font-size: 16px;
+}
+
+/* Role buttons inside login */
+.role-buttons button {
+    width: 45%;
+    margin: 5px;
+    padding: 10px;
+    font-weight: bold;
+}
+
+/* ---------------- Status Colors ---------------- */
+.pending {
+    background-color: #fff3cd;
+}
+
+.maintenance {
+    background-color: #ffe0b2;
+}
+
+.resolved {
+    background-color: #d4edda;
+}
+
+/* ---------------- Responsive Adjustments ---------------- */
+@media (max-width: 768px) {
+    .stats .card {
+        flex: 1 1 45%; /* 2 per row on tablet */
+    }
+
+    .dashboard-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .button {
+        width: 70%;
+        margin-bottom: 10px;
+    }
+
+    table {
+        font-size: 12px;
+    }
+
+    th, td {
+        padding: 6px;
+    }
+}
+
+@media (max-width: 480px) {
+    .stats .card {
+        flex: 1 1 90%; /* 1 per row on mobile */
+    }
+
+    .login-container {
+        width: 95%;
+        margin: 50px auto;
+        padding: 20px;
+    }
+
+    .login-container input, 
+    .login-container button {
+        width: 95%;
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    .button {
+        width: 80%;
+        font-size: 14px;
+        padding: 10px;
+    }
+
+    table {
+        font-size: 11px;
+    }
+}

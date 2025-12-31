@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Transactions - Sub Manager</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .highlight { background-color: yellow; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { border: 1px solid #aaa; padding: 6px; text-align: center; }
+        th { background: black; color:white; }
+        button { padding: 6px 10px; border-radius: 4px; border: none; cursor: pointer; }
+        button:hover { background-color: #45a049; }
+        .pending { background-color: #fff3cd; }         /* yellow */
+        .paid { background-color: #d1ecf1; }           /* blue */
+        .assigned { background-color: #d4edda; }       /* green */
+        .button-container { display: flex; justify-content: center; gap: 10px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Transactions - Assigned Users</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>User</th>
+                <th>Package</th>
+                <th>Price</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for t in transactions %}
+            <tr class="{% if t.status=='Pending' %}pending{% elif t.status=='Paid' %}paid{% elif t.assigned %}assigned{% endif %}">
+                <td>{{ t.username }}</td>
+                <td>{{ t.package_name }}</td>
+                <td>{{ t.price }}</td>
+                <td>{{ t.status }}{% if t.assigned %} - Assigned{% endif %}</td>
+                <td>
+                    <div class="button-container">
+                        <!-- Update status buttons -->
+                        <form method="post" class="inline" action="/transactions">
+                            <input type="hidden" name="transaction_id" value="{{ t.id }}">
+                            <input type="hidden" name="status" value="Pending">
+                            <button type="submit" {% if t.status=='Pending' %}disabled{% endif %}>Pending</button>
+                        </form>
+                        <form method="post" class="inline" action="/transactions">
+                            <input type="hidden" name="transaction_id" value="{{ t.id }}">
+                            <input type="hidden" name="status" value="Paid">
+                            <button type="submit" {% if t.status=='Paid' %}disabled{% endif %}>Paid</button>
+                        </form>
+                        <!-- Assign package button -->
+                        <form method="post" class="inline" action="/transactions">
+                            <input type="hidden" name="transaction_id" value="{{ t.id }}">
+                            <button type="submit" {% if t.status!='Paid' or t.assigned %}disabled{% endif %}>Assign</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <!-- Back button -->
+    <a href="/sub_dashboard" class="back-button">Back</a>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Updates - User</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<h1>User Updates Panel</h1>
+
+<div class="container">
+
+    <a href="/dashboard" class="back">⬅ Back to Dashboard</a>
+
+    <h3>All Updates for You</h3>
+
+    <table>
+        <tr>
+            <th>Sender</th>
+            <th>Comment</th>
+            <th>Date & Time</th>
+        </tr>
+
+        {% for u in updates %}
+        <tr class="highlight">
+        <td>{{ u.sender_name }} → {{ u.receiver_name }}</td>
+        <td>{{ u.comment }}</td>
+        <td>{{ u.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+</div>
+
+</body>
+</html>

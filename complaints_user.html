@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Submit Complaint</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="container">
+    <h2>Submit Complaint</h2>
+
+    <form method="post">
+        <textarea name="message" placeholder="Write your complaint" required></textarea>
+        <button type="submit">Submit</button>
+    </form>
+
+    <hr>
+
+    <h2>Your Complaints</h2>
+
+    {% for c in complaints %}
+        {% if c.serial == session.serial %}
+            <p><b>Date:</b> {{ c.timestamp }}</p>
+            <p>{{ c.message }}</p>
+            <p><b>Status:</b> {{ c.status }}</p>
+
+            {% if c.reply %}
+                <p><b>Manager Reply:</b> {{ c.reply }}</p>
+            {% endif %}
+            <hr>
+        {% endif %}
+    {% endfor %}
+
+    <a href="/dashboard">⬅ Back</a>
+</div>
+</body>
+</html>

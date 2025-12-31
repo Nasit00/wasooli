@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="login-container">
+    <h2>Login</h2>
+
+    {% if error %}
+        <p class="error">{{ error }}</p>
+    {% endif %}
+
+    <!-- USER LOGIN -->
+    <h3>User Login</h3>
+    <form method="post">
+        <input type="hidden" name="role" value="user">
+        <input type="text" name="username" placeholder="Username" required>
+        <input type="password" name="password" placeholder="Password" required>
+        <button type="submit">Login as User</button>
+    </form>
+
+    <!-- MANAGER LOGIN -->
+    <h3>Manager Login</h3>
+    <form method="post">
+        <input type="hidden" name="role" value="manager">
+        <input type="text" name="manager_id" placeholder="Manager ID" required>
+        <input type="password" name="password" placeholder="Password" required>
+        <button type="submit">Login as Manager</button>
+    </form>
+
+    <!-- SUB MANAGER LOGIN -->
+    <h3>Sub Manager Login</h3>
+    <form method="post">
+        <input type="hidden" name="role" value="sub_manager">
+        <input type="text" name="sub_manager_id" placeholder="Sub Manager ID" required>
+        <input type="password" name="password" placeholder="Password" required>
+        <button type="submit">Login as Sub Manager</button>
+    </form>
+
+</div>
+
+</body>
+</html>

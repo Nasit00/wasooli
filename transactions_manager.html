@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Manage Transactions</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="container">
+    <h1>Manage Packages & Transactions</h1>
+
+    <!-- -------- Update Package Price -------- -->
+    <h3>Update Package Price</h3>
+    <form method="post">
+        <select name="pkg_name" required>
+            {% for p in packages %}
+                <option value="{{ p.name }}">{{ p.name }}</option>
+            {% endfor %}
+        </select>
+        <input type="number" name="price" placeholder="New Price" required>
+        <button type="submit" name="price_update">Update Price</button>
+    </form>
+
+    <!-- -------- Add New Package -------- -->
+    <h3>Add New Package</h3>
+    <form method="post">
+        <input type="text" name="new_pkg_name" placeholder="Package Name" required>
+        <input type="number" name="new_pkg_price" placeholder="Price" required>
+        <button type="submit" name="add_package">Add Package</button>
+    </form>
+
+    <!-- -------- Assign Package to User (DO NOT TOUCH) -------- -->
+    <h3>Assign Package to User</h3>
+    <table>
+        <tr>
+            <th>User</th>
+            <th>Package</th>
+            <th>Price</th>
+            <th>Status</th>
+            <th>Receipt</th>
+            <th>Assign</th>
+        </tr>
+        {% for t in transactions %}
+        {% if t.status == "Paid" and not t.assigned %}
+        <tr>
+            <td>{{ t.username }}</td>
+            <td>{{ t.package_name }}</td>
+            <td>{{ t.price }}</td>
+            <td>{{ t.status }}</td>
+            <td>{{ t.receipt if t.receipt else '-' }}</td>
+            <td>
+                <form method="post">
+                    <input type="hidden" name="transaction_id" value="{{ t.id }}">
+                    <button type="submit" name="assign">Assign</button>
+                </form>
+            </td>
+        </tr>
+        {% endif %}
+        {% endfor %}
+    </table>
+
+    <!-- -------- Assigned Packages -------- -->
+    <h3>Already Assigned Packages</h3>
+    <table>
+        <tr>
+            <th>User</th>
+            <th>Package</th>
+            <th>Price</th>
+            <th>Status</th>
+            <th>Receipt</th>
+        </tr>
+        {% for t in transactions %}
+        {% if t.assigned %}
+        <tr>
+            <td>{{ t.username }}</td>
+            <td>{{ t.package_name }}</td>
+            <td>{{ t.price }}</td>
+            <td>{{ t.status }}</td>
+            <td>{{ t.receipt if t.receipt else '-' }}</td>
+        </tr>
+        {% endif %}
+        {% endfor %}
+    </table>
+
+    <!-- -------- All Transactions -------- -->
+    <h3>All Transactions</h3>
+    <table>
+        <tr>
+            <th>User</th>
+            <th>Package</th>
+            <th>Price</th>
+            <th>Status</th>
+            <th>Receipt Number</th>
+            <th>Change Status</th>
+        </tr>
+
+        {% for t in transactions %}
+        <tr class="{% if t.status=='Pending' %}pending{% elif t.status=='Paid' %}resolved{% endif %}">
+            <td>{{ t.username }}</td>
+            <td>{{ t.package_name }}</td>
+            <td>{{ t.price }}</td>
+            <td>{{ t.status }}</td>
+            <td>{{ t.receipt if t.receipt else '-' }}</td>
+            <td>
+                <form method="post" action="/update_transaction/{{ t.id }}">
+                    <select name="status">
+                        <option {% if t.status=='Pending' %}selected{% endif %}>Pending</option>
+                        <option {% if t.status=='Paid' %}selected{% endif %}>Paid</option>
+                    </select>
+                    <button type="submit">Update</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+<!-- Back button -->
+    <a href="/dashboard" class="back-button">Back</a>
+
+</div>
+
+</body>
+</html>

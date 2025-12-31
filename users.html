@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Manager Users</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="container">
+    <h1>Manage Users</h1>
+
+    <h3>Add New User:</h3>
+    <form method="post">
+        <input type="text" name="serial" placeholder="Serial Number" required>
+        <input type="text" name="username" placeholder="Username" required>
+        <input type="email" name="email" placeholder="Email" required>
+        <input type="text" name="number" placeholder="Number" required>
+        <input type="text" name="address" placeholder="Address" required>
+        <input type="password" name="password" placeholder="Password" required>
+        <button type="submit">Add User</button>
+    </form>
+
+    <h3>Current Users:</h3>
+    <table>
+        <tr>
+            <th>Serial</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Number</th>
+            <th>Address</th>
+            <th>Actions</th>
+        </tr>
+        {% for u in users %}
+        <tr {% if search_serial and u.serial_number == search_serial %} class="highlight" {% endif %}>
+            <td>{{ u.serial_number }}</td>
+            <td>{{ u.username }}</td>
+            <td>{{ u.email }}</td>
+            <td>{{ u.number }}</td>
+            <td>{{ u.address }}</td>
+            <td>
+                <a href="/edit/{{ u.serial_number }}{% if search_serial %}?search_serial={{ search_serial }}{% endif %}">Edit</a> |
+                <a href="/remove/{{ u.serial_number }}{% if search_serial %}?search_serial={{ search_serial }}{% endif %}">Remove</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <div class="dashboard-buttons">
+        <a class="button" href="/dashboard">⬅ Back to Dashboard</a>
+        <a class="button" href="/logout">Logout</a>
+    </div>
+</div>
+</body>
+</html>

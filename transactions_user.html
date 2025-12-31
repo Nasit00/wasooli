@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Transactions</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="container">
+    <h1>Internet Packages</h1>
+
+    <table>
+        <tr>
+            <th>Package</th>
+            <th>Price</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+
+        {% for t in transactions %}
+        <tr class="{% if t.status=='Pending' %}pending{% elif t.status=='Paid' %}resolved{% endif %}">
+            <td>{{ t.package_name }}</td>
+            <td>{{ t.price }}</td>
+            <td>{{ t.status }}</td>
+            <td>
+                {% if t.status == "Pending" %}
+                <form method="post">
+                    <input type="hidden" name="tid" value="{{ t.id }}">
+                    <input type="text" name="receipt" placeholder="Receipt No" required>
+                    <button type="submit">Confirm Payment</button>
+                </form>
+                {% else %}
+                    Paid
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <h3>Available Packages</h3>
+
+    <table border="1" cellpadding="8">
+        <tr>
+            <th>Package</th>
+            <th>Price</th>
+            <th>Action</th>
+        </tr>
+
+        {% for p in packages %}
+            {% set bought = false %}
+
+            {% for t in transactions %}
+                {% if t.package_name == p.name %}
+                    {% set bought = true %}
+                {% endif %}
+            {% endfor %}
+
+            <tr>
+                <td>{{ p.name }}</td>
+                <td>{{ p.price }}</td>
+                <td>
+                    <form method="POST">
+                        <input type="hidden" name="package" value="{{ p.name }}">
+
+                        <button type="submit" {% if bought %}disabled{% endif %}>
+                            {% if bought %}Purchased{% else %}Buy{% endif %}
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+
+
+
+<!-- Back button -->
+    <a href="/dashboard" class="back-button">Back</a>
+</div>
+
+</body>
+</html>

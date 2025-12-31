@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sub-Manager Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="stats">
+
+  <div class="card">
+    <h3>Assigned Users</h3>
+    <p>{{ total_assigned_users }}</p>
+  </div>
+
+  <div class="card">
+    <h3>Total Income</h3>
+    <p>Rs {{ total_income }}</p>
+  </div>
+
+  <div class="card">
+    <h3>Remaining Balance</h3>
+    <p>Rs {{ remaining_balance }}</p>
+  </div>
+
+  <div class="card">
+    <h3>Total Complaints</h3>
+    <p>{{ total_complaints }}</p>
+  </div>
+
+  <div class="card">
+    <h3>Resolved Complaints</h3>
+    <p>{{ resolved_complaints }}</p>
+  </div>
+
+</div>
+
+<div class="container">
+    <h1>Sub-Manager Dashboard</h1>
+
+    <!-- ================= USERS LIST ================= -->
+    <h3>All Users Assigned to You:</h3>
+    <table>
+        <tr>
+            <th>Serial</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Number</th>
+            <th>Address</th>
+        </tr>
+        {% for u in users %}
+        <tr>
+            <td>{{ u.serial_number }}</td>
+            <td>{{ u.username }}</td>
+            <td>{{ u.email }}</td>
+            <td>{{ u.number }}</td>
+            <td>{{ u.address }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <div class="dashboard-buttons">
+        <a class="button" href="/transactions">Transactions</a>
+        <a class="button" href="/complaints">Complaints</a>
+        <a class="button" href="/updates">Updates</a>
+        <a class="button" href="/logout">Logout</a>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Updates - Manager</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body { font-family: Arial; background: linear-gradient(45deg,#01a7f4,#483f3f71 70%); }
+        h1 { text-align: center; margin-top: 20px; }
+        .container { width: 90%; margin: auto; background: #fff; padding: 20px; border-radius: 8px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #aaa; padding: 8px; text-align: center; }
+        th { background: black; color: white; }
+        input, select { padding: 6px; margin: 5px; }
+        button { padding: 6px 10px; background: #4CAF50; color: white; border: none; cursor: pointer; border-radius: 4px; }
+        button:hover { background-color: #45a049; }
+        .highlight { background-color: #fff3cd; }
+        .back { display: inline-block; margin-bottom: 10px; text-decoration: none; padding: 6px 10px; background: #007BFF; color: white; border-radius: 4px; }
+        .back:hover { background-color: #0056b3; }
+        textarea { width: 90%; height: 80px; padding: 10px; margin: 5px 0; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <a href="/dashboard" class="back">⬅ Back to Dashboard</a>
+
+    <h3>Send Update</h3>
+    <form method="post">
+        <select name="user_serial" required>
+            {% for u in users %}
+            <option value="{{ u.serial_number }}">{{ u.username }}</option>
+            {% endfor %}
+        </select>
+        <input type="text" name="comment" placeholder="Write update here" required>
+        <button type="submit">Send Update</button>
+    </form>
+
+    <h3>All Updates</h3>
+    <table>
+        <tr>
+            <th>Sender</th>
+            <th>Receiver</th>
+            <th>Comment</th>
+            <th>Timestamp</th>
+        </tr>
+        {% for u in updates %}
+        <tr>
+            <td>{{ u.sender_name }}</td>
+            <td>{{ u.receiver_name }}</td>
+            <td>{{ u.comment }}</td>
+            <td>{{ u.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+</body>
+</html>
